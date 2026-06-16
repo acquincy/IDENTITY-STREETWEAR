@@ -13,20 +13,17 @@ export function LeadCapture() {
     setErrorMessage("");
 
     const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
 
     try {
-      const response = await fetch("/api/webhook", {
+      const webhookUrl = import.meta.env.VITE_WEBHOOK_URL || "https://www.classwithspeed.pro/webhook/8949a2eb-fcec-4c77-b4bf-06985edccb29";
+      const response = await fetch(webhookUrl, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        body: formData,
       });
 
       const responseText = await response.text();
-      console.log("Proxy response status:", response.status);
-      console.log("Proxy response body:", responseText);
+      console.log("Webhook response status:", response.status);
+      console.log("Webhook response body:", responseText);
 
       if (response.ok) {
         setStatus("success");
